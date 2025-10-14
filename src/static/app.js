@@ -10,8 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/activities");
       const activities = await response.json();
 
-      // Clear loading message
+      // Clear loading message and avoid duplicate options
       activitiesList.innerHTML = "";
+      // Keep the first placeholder option in the select and remove others
+      while (activitySelect.options.length > 1) {
+        activitySelect.remove(1);
+      }
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
@@ -56,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Insert participants section nicely
         activityCard.appendChild(participantsSection);
 
-        activitiesList.appendChild(activityCard);
+  activitiesList.appendChild(activityCard);
 
         // Add option to select dropdown
         const option = document.createElement("option");
@@ -91,6 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+        // Refresh activities so the new participant is shown immediately
+        fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";
