@@ -104,6 +104,46 @@ section h3 {
   font-size: 13px;
 }
 
+/* Hide default bullets when requested and style participant rows */
+.participants-list.no-bullets {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  gap: 8px;
+}
+
+.participant-name {
+  color: #333;
+  font-size: 14px;
+}
+
+.participant-remove {
+  background: transparent;
+  border: 1px solid #eee;
+  color: #c62828;
+  font-weight: bold;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.08s;
+}
+
+.participant-remove:hover {
+  background-color: #ffebee;
+  transform: translateY(-1px);
+}
+
 .form-group {
   margin-bottom: 15px;
 }

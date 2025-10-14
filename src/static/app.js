@@ -34,12 +34,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (Array.isArray(details.participants) && details.participants.length > 0) {
           const ul = document.createElement("ul");
-          ul.className = "participants-list";
+          ul.className = "participants-list no-bullets";
           details.participants.forEach((p) => {
             const li = document.createElement("li");
+            li.className = "participant-item";
+
             // Show only name part before @ if it looks like an email for compactness
             const display = p.includes("@") ? p.split("@")[0] : p;
-            li.textContent = display;
+
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = display;
+            nameSpan.className = "participant-name";
+
+            const delBtn = document.createElement("button");
+            delBtn.className = "participant-remove";
+            delBtn.title = `Remove ${p}`;
+            delBtn.innerHTML = "&times;"; // simple x icon
+
+            delBtn.addEventListener("click", async () => {
+              if (!confirm(`Remove ${p} from ${name}?`)) return;
+              try {
+                const resp = await fetch(
+                  `/activities/${encodeURIComponent(name)}/participants?email=${encodeURIComponent(p)}`,
+                  { method: "DELETE" }
+                );
+
+                if (resp.ok) {
+                  // Refresh activities after removal
+                  fetchActivities();
+                } else {
+                  const err = await resp.json();
+                  alert(err.detail || "Failed to remove participant");
+                }
+              } catch (err) {
+                console.error(err);
+                alert("Failed to remove participant. Try again.");
+              }
+            });
+
+            li.appendChild(nameSpan);
+            li.appendChild(delBtn);
             ul.appendChild(li);
           });
           participantsSection.appendChild(ul);
